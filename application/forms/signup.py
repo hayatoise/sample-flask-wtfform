@@ -28,14 +28,12 @@ class SignupForm(Form):
         Length(max=1024, message='パスワードは 1024 文字以内です')
     ])
 
-    @classmethod
-    def confirm_email_address_duplicate(cls, email):
-        user = User.query.filter_by(email=email.data).first()
+    def confirm_email_address_duplicate(self):
+        user = User.query.filter_by(email=self.email.data).first()
         if user is not None:
             raise ValidationError('このメールアドレスは既に使われています')
 
-    @classmethod
-    def confirm_name_duplicate(cls, name):
-        user = User.query.filter_by(name=name.data).first()
+    def confirm_name_duplicate(self):
+        user = User.query.filter_by(name=self.name.data).first()
         if user is not None:
             raise ValidationError('このユーザ名は既に使われています')
