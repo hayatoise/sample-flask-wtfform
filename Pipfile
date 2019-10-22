@@ -13,6 +13,7 @@ pymysql = "*"
 flask-migrate = "*"
 flask-login = "*"
 werkzeug = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.7"
