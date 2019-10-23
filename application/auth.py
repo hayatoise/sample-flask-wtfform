@@ -1,6 +1,6 @@
 from typing import Text
 
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, make_response, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
 
@@ -13,7 +13,7 @@ auth = Blueprint('auth', __name__)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
-def login() -> Text:
+def login() -> Response:
     login_form = LoginForm()
 
     if request.method == 'POST':
@@ -25,15 +25,15 @@ def login() -> Text:
             user = User.query.filter_by(email=email).first()
             if check_password_hash(pwhash=user.password, password=password):
                 login_user(user, remember=remember)
-                return redirect(url_for('main.profile'))
+                return make_response(redirect(url_for('main.profile')))
             elif not check_password_hash(pwhash=user.password, password=password):
                 flash('入力されたパスワードが正しくありません')
-                return redirect(url_for('auth.login'))
+                return make_response(redirect(url_for('auth.login')))
             else:
                 flash('予期せぬエラーが発生しました')
-                return redirect(url_for('auth.login'))
+                return make_response(redirect(url_for('auth.login')))
 
-    return render_template('login.html', form=login_form)
+    return make_response(render_template('login.html', form=login_form))
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
