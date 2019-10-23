@@ -42,7 +42,7 @@ def signup() -> Response:
         if signup_form.validate_on_submit():
             dict_type_form = dict(request.form)
             email: str = dict_type_form.get('email')
-            name: str = dict_type_form.get('name')
+            name: str = dict_type_form.get('name').lower()
             display_name: str = dict_type_form.get('display_name')
             password: str = dict_type_form.get('password')
             hashed_password: str = generate_password_hash(password, method='sha256')
