@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title">アカウントを作成</h3>
+    <h3 class="title">アカウント作成</h3>
     <div class="box">
         <form method="POST">
             {{ form.csrf_token }}
@@ -19,7 +19,7 @@
                 </div>
                 {% if form.email.errors %}
                 {% for error in form.email.errors %}
-                <p class="help is-danger">{{ error }}</p>
+                <p class="help is-danger">{{ error }}。</p>
                 {% endfor %}
                 {% endif %}
             </div>
@@ -37,7 +37,7 @@
                 </div>
                 {% if form.name.errors %}
                 {% for error in form.name.errors %}
-                <p class="help is-danger">{{ error }}</p>
+                <p class="help is-danger">{{ error }}。</p>
                 {% endfor %}
                 {% endif %}
             </div>
@@ -55,7 +55,7 @@
                 </div>
                 {% if form.display_name.errors %}
                 {% for error in form.display_name.errors %}
-                <p class="help is-danger">{{ error }}</p>
+                <p class="help is-danger">{{ error }}。</p>
                 {% endfor %}
                 {% endif %}
             </div>
@@ -73,12 +73,12 @@
                 </div>
                 {% if form.password.errors %}
                 {% for error in form.password.errors %}
-                <p class="help is-danger">{{ error }}</p>
+                <p class="help is-danger">{{ error }}。</p>
                 {% endfor %}
                 {% endif %}
             </div>
             <div class="field">
-                <div class="control has-icons-left">
+                <div class="control">
                     {{ form.submit }}
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title">ログインする</h3>
+    <h3 class="title">ログイン</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -12,27 +12,54 @@
         {% endif %}
         {% endwith %}
         <form method="POST" action="/login">
+            {{ form.csrf_token }}
             <div class="field">
-                <div class="control">
-                    <label class="label">メールアドレス</label>
-                    <input class="input is-large" type="email" name="email" placeholder="example@gmail.com"
-                           autofocus="">
+                <label class="label">{{ form.email.label }}</label>
+                <div class="control has-icons-left">
+                    {% if form.email.errors %}
+                    {{ form.email(class_="input is-danger") }}
+                    {% else %}
+                    {{ form.email(class_="input") }}
+                    {% endif %}
+                    <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                    </span>
                 </div>
+                {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                <p class="help is-danger">{{ error }}。</p>
+                {% endfor %}
+                {% endif %}
             </div>
-
             <div class="field">
-                <div class="control">
-                    <label class="label">パスワード</label>
-                    <input class="input is-large" type="password" name="password" placeholder="">
+                <label class="label">{{ form.password.label }}</label>
+                <div class="control has-icons-left">
+                    {% if form.password.errors %}
+                    {{ form.password(class_="input is-danger") }}
+                    {% else %}
+                    {{ form.password(class_="input") }}
+                    {% endif %}
+                    <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                    </span>
                 </div>
+                {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                <p class="help is-danger">{{ error }}。</p>
+                {% endfor %}
+                {% endif %}
             </div>
             <div class="field">
                 <label class="checkbox">
-                    <input type="checkbox">
-                    パスワードを保存する
+                    {{ form.remember }}
+                    {{ form.remember.label }}
                 </label>
             </div>
-            <button class="button is-block is-info is-large is-fullwidth">ログイン</button>
+            <div class="field">
+                <div class="control">
+                    {{ form.submit }}
+                </div>
+            </div>
         </form>
     </div>
 </div>

@@ -7,51 +7,33 @@ from flask_login import login_user, login_required, logout_user
 from application.models import User
 from application.database import db
 from application.forms.signup import SignupForm
+from application.forms.login import LoginForm
 
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/login', methods=['GET'])
-def login():
-    return render_template('login.html')
+@auth.route('/login', methods=['GET', 'POST'])
+def login() -> Text:
+    login_form = LoginForm()
 
+    if request.method == 'POST':
+        if login_form.validate_on_submit():
+            form = dict(request.form)
+            email: str = form.get('email')
+            password: str = form.get('password')
+            remember: bool = True if form.get('remember') else False
+            user = User.query.filter_by(email=email).first()
+            if check_password_hash(pwhash=user.password, password=password):
+                login_user(user, remember=remember)
+                return redirect(url_for('main.profile'))
+            elif not check_password_hash(pwhash=user.password, password=password):
+                flash('入力されたパスワードが正しくありません')
+                return redirect(url_for('auth.login'))
+            else:
+                flash('予期せぬエラーが発生しました')
+                return redirect(url_for('auth.login'))
 
-@auth.route('/login', methods=['POST'])
-def login_post():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
-
-    # フォームの空欄を確認
-    if email == '' or password == '':
-        flash('メールアドレスまたはパスワードが空欄です')
-        return redirect(url_for('auth.login'))
-
-    # メールアドレスは 6 ~ 254 文字以内
-    if not 6 <= len(email) <= 254:
-        flash('メールアドレスは 6 ~ 254 文字以内にして下さい')
-        return redirect(url_for('auth.login'))
-
-    # パスワードの長さは 12 文字以上
-    if not 12 <= len(password):
-        flash('パスワードは 12 文字以上にして下さい')
-        return redirect(url_for('auth.login'))
-
-    user = User.query.filter_by(email=email).first()
-
-    # ユーザ情報の有無を確認
-    if not user:
-        flash('入力されたメールアドレスが正しくありません')
-        return redirect(url_for('auth.login'))
-
-    # パスワードのチェック
-    if not check_password_hash(user.password, password):
-        flash('入力されたパスワードが正しくありません')
-        return redirect(url_for('auth.login'))
-
-    login_user(user, remember=remember)
-
-    return redirect(url_for('main.profile'))
+    return render_template('login.html', form=login_form)
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
