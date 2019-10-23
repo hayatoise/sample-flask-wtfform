@@ -67,6 +67,6 @@ def signup() -> Text:
 
 @auth.route('/logout')
 @login_required
-def logout() -> Text:
+def logout() -> Response:
     logout_user()
-    return redirect(url_for('main.index'))
+    return make_response(redirect(url_for('main.index')))
