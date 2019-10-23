@@ -11,4 +11,4 @@ def index() -> Response:
 
 @main.route('/profile')
 def profile() -> Response:
-    return make_response(render_template('profile.html', name=current_user.name))
+    return make_response(render_template('profile.html', diplay_name=current_user.display_name))
