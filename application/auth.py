@@ -16,10 +16,10 @@ def login() -> Response:
 
     if request.method == 'POST':
         if login_form.validate_on_submit():
-            form = dict(request.form)
-            email: str = form.get('email')
-            password: str = form.get('password')
-            remember: bool = True if form.get('remember') else False
+            dict_type_form = dict(request.form)
+            email: str = dict_type_form.get('email')
+            password: str = dict_type_form.get('password')
+            remember: bool = True if dict_type_form.get('remember') else False
             user = User.query.filter_by(email=email).first()
             if check_password_hash(pwhash=user.password, password=password):
                 login_user(user, remember=remember)
@@ -40,11 +40,11 @@ def signup() -> Response:
 
     if request.method == 'POST':
         if signup_form.validate_on_submit():
-            form = dict(request.form)
-            email: str = form.get('email')
-            name: str = form.get('name')
-            display_name: str = form.get('display_name')
-            password: str = form.get('password')
+            dict_type_form = dict(request.form)
+            email: str = dict_type_form.get('email')
+            name: str = dict_type_form.get('name')
+            display_name: str = dict_type_form.get('display_name')
+            password: str = dict_type_form.get('password')
             hashed_password: str = generate_password_hash(password, method='sha256')
             new_user = User(name=name, display_name=display_name, email=email, password=hashed_password)
 
