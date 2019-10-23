@@ -1,13 +1,11 @@
-from typing import Text
-
 from flask import Blueprint, render_template, redirect, url_for, request, flash, make_response, Response
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from application.models import User
 from application.database import db
-from application.forms.signup import SignupForm
+from application.models import User
 from application.forms.login import LoginForm
+from application.forms.signup import SignupForm
 
 auth = Blueprint('auth', __name__)
 
@@ -37,7 +35,7 @@ def login() -> Response:
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
-def signup() -> Text:
+def signup() -> Response:
     signup_form = SignupForm()
 
     if request.method == 'POST':
@@ -60,9 +58,9 @@ def signup() -> Text:
             finally:
                 db.session.close()
 
-            return redirect(url_for('auth.login'))
+            return make_response(redirect(url_for('auth.login')))
 
-    return render_template('signup.html', form=signup_form)
+    return make_response(render_template('signup.html', form=signup_form))
 
 
 @auth.route('/logout')
